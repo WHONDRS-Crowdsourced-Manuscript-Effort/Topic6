@@ -27,3 +27,5 @@
 *.png binary
 *.xlsx binary
 *.pptx binary
+*.emf binary
+*.png binary
