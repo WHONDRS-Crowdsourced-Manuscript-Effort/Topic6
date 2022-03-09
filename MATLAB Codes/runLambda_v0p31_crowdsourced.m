@@ -1,4 +1,4 @@
-function tblOut = runLambda_v0p31_crowdsourced(tbl,phspan,wrt)
+function tblOut = runLambda_v0p31_crowdsourced(tbl,phspan,wrt,filename)
 
 %% remove 'NA' rows where no chemical formulas assigned
 
