@@ -3,18 +3,20 @@ function runLambda_v0p31
 clc, clear, close all
 
 % read data as table
-filename='Processed_S19S_Sediments_Water_2-2_newcode';
+filename='Processed_S19S_Sediments_Water_2-2_newcode.csv';
 % filename='RepresentativePyOM';
 
-tbl=readtable([filename,'.csv']);
+tbl=readtable(filename);
 
-%% remove 'NA' rows where no chemical formulas assigned 
+%% remove 'NA' rows where no chemical formulas assigned
+
 idxNa=tbl.C==0; % rows with no carbon 
 tbl(idxNa,:)=[];
 nCpd=size(tbl,1); % # of compounds
 
 %% add 'Z' column (electron charge) if not provided from the input data
-% -- make a reduced-size table 
+% -- make a reduced-size table
+
 MolForm=tbl.MolForm;
 C=tbl.C;
 H=tbl.H;
