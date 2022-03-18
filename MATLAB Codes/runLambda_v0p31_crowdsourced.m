@@ -1,9 +1,5 @@
-function tblOut = runLambda_v0p31_crowdsourced(tbl,phspan,wrt,filename)
+function tblOut = runLambda_v0p31_crowdsourced(tbl,phspan,wrt,dataDescrp)
 
-%% remove 'NA' rows where no chemical formulas assigned
-
-idxNa=tbl.C==0; % rows with no carbon 
-tbl(idxNa,:)=[];
 nCpd=size(tbl,1); % # of compounds
 
 %% add 'Z' column (electron charge) if not provided from the input data
@@ -80,8 +76,8 @@ for iph=1:nph
 
     % save the results
     if strcmpi(wrt,'y')
-        save([filename,'_out_','pH',num2str(ph),'.mat'],'tblOut')
-        write(tblOut,[filename,'_out','pH',num2str(ph),'.csv'])
+        save(sprintf("%s_out_pH%s.mat",dataDescrp,num2str(ph)))
+        write(tblOut,sprintf("%s_out_pH%s.csv",dataDescrp,num2str(ph)))
     end
 
 end
