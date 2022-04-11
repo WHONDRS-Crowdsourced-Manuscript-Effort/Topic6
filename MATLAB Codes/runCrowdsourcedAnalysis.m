@@ -54,9 +54,18 @@ wrt = 'n';
 tblOut = runLambda_v0p31_crowdsourced(tbl_fticr,phspan,wrt,dataDescrp);
 assignin('base',"tblOut",tblOut)
 
+% Remove Nan data
 idxExcl = find(isnan(tblOut.lambda)|isinf(tblOut.lambda));
 tblOut(idxExcl,:) = [];
 tbl_fticr(idxExcl,:) = [];
+
+% Fix negative lambda
+idxZero = find(tblOut.lambda<0);
+tblOut.lambda(idxZero) = 0;
+
+%% Distirbution of thermodynamic properties
+
+histogram(tblOut.lambda)
 
 %% Metadata classification
 
@@ -142,12 +151,10 @@ grouping(intersect(idx_samp_sw,idx_samp_pern),3) = cellstr("Surface water + Pere
 T1 = array2table(dat','VariableNames',samp,'RowNames',cellstr("cpd_"+string(1:size(dat,2))));
 T2 = cell2table(grouping);
 
-% writetable(T1,"data.csv")
-% writetable(T2,"grouping.csv")
+writetable(T1,"PCAdata.csv")
+writetable(T2,"PCAgrouping.csv")
 
-%% Distirbution of thermodynamic properties
-
-
+return
 
 %% SINDy
 
@@ -155,5 +162,6 @@ outp = goSindy(depVar,Theta,lambdaGuess,nlambda,lambda,plt);
 
 %% Postprocessing
 
+find(strcmp(tbl_fticr.Properties.VariableNames,"S19S_0079_Sed_Field_ICR_D_p2"))
 
 % end
