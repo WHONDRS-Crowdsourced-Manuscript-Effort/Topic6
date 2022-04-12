@@ -27,13 +27,12 @@ library(pca3d)
 ################################################################################
 
 # Load data
-Dat <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/data.csv")
-grouping <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/grouping.csv")
+Dat <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAdata.csv")
+grouping <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAgrouping.csv")
 
-idxRemoveSamp1 <- which(colnames(Dat)=="S19S_0079_Sed_Field_ICR_D_p2")
-idxRemoveSamp2 <- which(grouping[,2]=="na")
-
-idxRemoveSamp <- unique(c(idxRemoveSamp1,idxRemoveSamp2))
+#idxRemoveSamp1 <- which(colnames(Dat)=="S19S_0079_Sed_Field_ICR_D_p2")
+idxRemoveSamp <- which(grouping[,2]=="na")
+#idxRemoveSamp <- unique(c(idxRemoveSamp1,idxRemoveSamp2))
 
 Dat <- Dat[,-idxRemoveSamp]
 grouping <- grouping[-idxRemoveSamp,]
@@ -48,7 +47,7 @@ mat <- t(Dat)
 # pca
 idx0 <-  which(colSums(mat) %in% 0)
 idxVar0 <- which(apply(mat, 2, var)==0)
-idx <- c(idx0,idxVar0)
+idx <- unique(c(idx0,idxVar0))
 
 if (isempty(idx)) {
 } else {
@@ -69,5 +68,5 @@ fviz_pca_ind(mat.pca,
              geom="point"
              )
 
-pca3d(mat.pca, group=grouping3)
+# pca3d(mat.pca, group=grouping3)
 
