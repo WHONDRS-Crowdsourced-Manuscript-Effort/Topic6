@@ -27,12 +27,23 @@ library(pca3d)
 ################################################################################
 
 # Load data
-Dat <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAdata.csv")
+Dat_lambda <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAdata_lambda.csv")
+Dat_delGcox <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAdata_delGcox.csv")
 grouping <- read.csv(file = "C:/Users/fahamed2/OneDrive - University of Nebraska-Lincoln/Firnaaz Ahamed/Ongoing Research/WHONDRS Crowdsourced Manuscript/Topic6_Git/MATLAB Codes/PCAgrouping.csv")
 
-#idxRemoveSamp1 <- which(colnames(Dat)=="S19S_0079_Sed_Field_ICR_D_p2")
-idxRemoveSamp <- which(grouping[,2]=="na")
-#idxRemoveSamp <- unique(c(idxRemoveSamp1,idxRemoveSamp2))
+# Choose data
+Dat <- Dat_lambda
+# Dat <- Dat_delGcox
+
+# Remove Nan
+Dat <- na.omit(Dat)
+Dat <- Dat[,-1]
+
+# Filter data
+idxRemoveSamp1 <- which(colnames(Dat)=="S19S_0079_Sed_Field_ICR_D_p2")
+# idxRemoveSamp1 <- c()
+idxRemoveSamp2 <- which(grouping[,2]=="na")
+idxRemoveSamp <- unique(c(idxRemoveSamp1,idxRemoveSamp2))
 
 Dat <- Dat[,-idxRemoveSamp]
 grouping <- grouping[-idxRemoveSamp,]
@@ -45,9 +56,9 @@ grouping3 <- grouping$grouping3
 mat <- t(Dat)
 
 # pca
-idx0 <-  which(colSums(mat) %in% 0)
+idxSum0 <-  which(colSums(mat) %in% 0)
 idxVar0 <- which(apply(mat, 2, var)==0)
-idx <- unique(c(idx0,idxVar0))
+idx <- unique(c(idxSum0,idxVar0))
 
 if (isempty(idx)) {
 } else {
@@ -57,7 +68,7 @@ if (isempty(idx)) {
 mat.pca <- prcomp(mat, center=TRUE, scale. = TRUE)
 
 # plot  
-fviz_eig(mat.pca)
+# fviz_eig(mat.pca)
 
 fviz_pca_ind(mat.pca,
              col.ind = grouping3, # color by groups

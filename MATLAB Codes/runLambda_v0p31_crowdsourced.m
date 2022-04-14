@@ -44,6 +44,7 @@ stoichMet=zeros(nCpd,10); % metabolic rxn
 % phspan=7;
 nph=length(phspan);
 CUEph=zeros(nCpd,nph);
+collate = cell(nph,2);
 for iph=1:nph
     ph=phspan(iph);
     for iCpd=1:nCpd
@@ -74,13 +75,24 @@ for iph=1:nph
     tblStoich=table(CUE,stoichD,stoichA,stoichCat,stoichAn,stoichMet); %[e-donor,h2o,hco3,nh4,hpo4,hs,h,e,e-acceptor,biom]
     tblOut=[tblCpd tblThermo tblStoich];
 
+    % Fix negative lambda
+    idxZero = find(tblOut.lambda<0);
+    tblOut.lambda(idxZero) = 0;
+
     % save the results
     if strcmpi(wrt,'y')
         save(sprintf("%s_out_pH%s.mat",dataDescrp,num2str(ph)))
         write(tblOut,sprintf("%s_out_pH%s.csv",dataDescrp,num2str(ph)))
     end
 
+    % collate the results
+    collate{iph,1} = ph;
+    collate{iph,2} = tblOut;
+
 end
+
+% function output
+tblOut = cell2table(collate,"VariableNames",["pH","tblOut"]);
 
 % figure
 % x=phspan;
